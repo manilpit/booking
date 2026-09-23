@@ -4,17 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Timebestilling for datasystemet 2026</title>
+  <title>Møteforespørsel for datasystemet 2026</title>
 
   <style>
     :root {
       --blue: #005a9c;
       --blue-dark: #003f6f;
-      --blue-light: #eaf4fb;
       --green: #177245;
-      --green-light: #edf8f2;
-      --yellow: #fff4ce;
+      --green-dark: #105a36;
       --red: #b42318;
+      --yellow: #fff4ce;
       --text: #17212b;
       --muted: #5d6772;
       --border: #d8dee4;
@@ -69,7 +68,6 @@
     }
 
     .header p {
-      max-width: 640px;
       margin: 14px 0 0;
       line-height: 1.6;
       opacity: 0.92;
@@ -112,7 +110,7 @@
     }
 
     textarea {
-      min-height: 105px;
+      min-height: 110px;
       resize: vertical;
       line-height: 1.5;
     }
@@ -151,20 +149,15 @@
       font: inherit;
       font-weight: 750;
       cursor: pointer;
-      transition:
-        transform 120ms ease,
-        background 120ms ease;
     }
 
     button:hover {
       background: var(--blue-dark);
-      transform: translateY(-1px);
     }
 
     button:disabled {
       cursor: wait;
       opacity: 0.68;
-      transform: none;
     }
 
     .progress {
@@ -186,7 +179,7 @@
       height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, var(--blue), #39a0d8);
-      transition: width 500ms ease;
+      transition: width 450ms ease;
     }
 
     .status {
@@ -198,10 +191,10 @@
 
     .result {
       display: none;
-      margin-top: 25px;
     }
 
     .reveal {
+      margin-bottom: 22px;
       padding: 22px;
       border: 1px solid #edb7b2;
       border-radius: 14px;
@@ -212,14 +205,14 @@
     .reveal .small {
       margin: 0;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     .reveal h2 {
-      margin: 10px 0 6px;
+      margin: 8px 0;
       color: var(--red);
       font-size: clamp(2.2rem, 8vw, 4rem);
     }
@@ -228,36 +221,35 @@
       margin: 0;
       font-size: clamp(1.15rem, 4vw, 1.55rem);
       font-weight: 800;
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
-    .email-card {
-      margin-top: 20px;
+    .editor-card {
       padding: 22px;
       border: 1px solid #b9dcc9;
       border-radius: 14px;
-      background: var(--green-light);
+      background: #edf8f2;
     }
 
-    .email-card h3 {
+    .editor-card h2 {
       margin: 0 0 8px;
       color: var(--green);
-      font-size: 1.35rem;
+      font-size: 1.45rem;
     }
 
-    .email-card > p {
+    .editor-card p {
       margin: 0 0 18px;
       line-height: 1.55;
     }
 
-    .email-field {
-      margin-top: 16px;
-    }
-
-    .email-output {
-      min-height: 275px;
+    .email-editor {
+      min-height: 420px;
       background: var(--white);
-      line-height: 1.55;
+      font-family:
+        ui-monospace, SFMono-Regular, Menlo, Monaco,
+        Consolas, "Liberation Mono", monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     .button-row {
@@ -276,7 +268,7 @@
     }
 
     .copy-button:hover {
-      background: #105a36;
+      background: var(--green-dark);
     }
 
     .reset-button {
@@ -303,13 +295,6 @@
       text-align: center;
     }
 
-    noscript {
-      display: block;
-      padding: 16px;
-      border-radius: 10px;
-      background: var(--yellow);
-    }
-
     @media (max-width: 600px) {
       body {
         padding: 16px 10px;
@@ -332,31 +317,26 @@
   <main class="page">
     <header class="header">
       <p class="label">NOKUTs datasystem</p>
-      <h1>Timebestilling 2026</h1>
+      <h1>Møteforespørsel 2026</h1>
+
       <p>
-        Beskriv hva du trenger hjelp med, så forbereder systemet
-        en nesten automatisk møteforespørsel.
+        Beskriv hva du trenger hjelp med, så finner systemet
+        den mest avanserte måten å be Mathias eller Erlend om hjelp på.
       </p>
     </header>
 
     <section class="card">
-      <noscript>
-        Denne løsningen krever JavaScript for å foreta den helt
-        automatiske og definitivt ekte bestillingen.
-      </noscript>
-
-      <form id="bookingForm">
+      <form id="requestForm">
         <p class="intro">
-          Fyll ut skjemaet. Systemet validerer bestillingen og lager
-          en ferdig tekst som du kan lime inn i en e-post til Mathias
-          eller Erlend.
+          Fyll ut skjemaet. Etterpå lager systemet en møteforespørsel
+          basert på valgene dine.
         </p>
 
         <div class="field">
-          <label for="navn">Hva heter du?</label>
+          <label for="name">Hva heter du?</label>
+
           <input
-            id="navn"
-            name="navn"
+            id="name"
             type="text"
             autocomplete="name"
             placeholder="Skriv navnet ditt"
@@ -365,8 +345,9 @@
         </div>
 
         <div class="field">
-          <label for="fagomrade">Hvilket fagområde gjelder det?</label>
-          <select id="fagomrade" name="fagomrade" required>
+          <label for="area">Hvilket fagområde gjelder det?</label>
+
+          <select id="area" required>
             <option value="">Velg fagområde</option>
             <option>EBAS – spørreundersøkelser og evalueringer</option>
             <option>NEBAS – nasjonale eksamensdata</option>
@@ -376,8 +357,9 @@
         </div>
 
         <div class="field">
-          <label for="oppgave">Hva trenger du hjelp med?</label>
-          <select id="oppgave" name="oppgave" required>
+          <label for="task">Hva ønsker du hjelp med?</label>
+
+          <select id="task" required>
             <option value="">Velg oppgave</option>
             <option>Laste opp eller importere data</option>
             <option>Validere data</option>
@@ -389,14 +371,13 @@
         </div>
 
         <div class="field">
-          <label for="beskrivelse">
+          <label for="description">
             Beskriv kort hva du ønsker å gjøre
           </label>
 
           <textarea
-            id="beskrivelse"
-            name="beskrivelse"
-            maxlength="600"
+            id="description"
+            maxlength="800"
             placeholder="For eksempel: Jeg skal laste opp data fra en spørreundersøkelse og ønsker hjelp med import og validering."
             required
           ></textarea>
@@ -407,25 +388,24 @@
         </div>
 
         <div class="field">
-          <label for="radgiver">
-            Hvem vil du sende forespørselen til?
+          <label for="recipient">
+            Hvem ønsker du å spørre?
           </label>
 
-          <select id="radgiver" name="radgiver" required>
+          <select id="recipient" required>
             <option value="">Velg mottaker</option>
             <option value="Mathias">Mathias</option>
             <option value="Erlend">Erlend</option>
             <option value="Mathias og Erlend">Mathias og Erlend</option>
-            <option value="automatisk">Systemet får velge</option>
           </select>
         </div>
 
         <div class="time-notice">
-          <strong>Anbefalt tidspunkt:</strong>
+          <strong>Tips:</strong>
           Fredag er ofte en god tid, som regel etter lunsj.
         </div>
 
-        <button id="submitButton" type="submit">
+        <button id="generateButton" type="submit">
           Lag møteforespørsel
         </button>
       </form>
@@ -436,22 +416,23 @@
         role="status"
         aria-live="polite"
       >
-        <div class="progress-bar" aria-hidden="true">
+        <div class="progress-bar">
           <div id="progressFill" class="progress-fill"></div>
         </div>
 
         <p id="statusText" class="status">
-          Starter validering …
+          Starter …
         </p>
       </div>
 
-      <div
+      <section
         id="result"
         class="result"
         aria-live="polite"
       >
         <div class="reveal">
-          <p class="small">Bestillingsstatus</p>
+          <p class="small">Resultat</p>
+
           <h2>NEIDA!</h2>
 
           <p class="message">
@@ -459,31 +440,24 @@
           </p>
         </div>
 
-        <div class="email-card">
-          <h3>E-posten er i det minste skrevet for deg</h3>
+        <div class="editor-card">
+          <h2>Her er e-posten din</h2>
 
           <p>
-            Kopier teksten nedenfor, lim den inn i en e-post,
-            kontroller innholdet og send den til valgt mottaker.
+            Systemet har laget en e-post basert på valgene dine.
+            Du kan redigere teksten direkte i feltet, kopiere den
+            og lime den inn i din egen e-post.
           </p>
 
-          <div class="email-field">
-            <label for="emailSubject">Emne</label>
-            <input
-              id="emailSubject"
-              type="text"
-              readonly
-            >
-          </div>
+          <label for="emailEditor">
+            Ferdig e-post
+          </label>
 
-          <div class="email-field">
-            <label for="emailBody">E-posttekst</label>
-            <textarea
-              id="emailBody"
-              class="email-output"
-              readonly
-            ></textarea>
-          </div>
+          <textarea
+            id="emailEditor"
+            class="email-editor"
+            spellcheck="true"
+          ></textarea>
 
           <div class="button-row">
             <button
@@ -491,7 +465,7 @@
               class="copy-button"
               type="button"
             >
-              Kopier emne og e-posttekst
+              Kopier hele e-posten
             </button>
 
             <button
@@ -499,7 +473,7 @@
               class="reset-button"
               type="button"
             >
-              Lag en ny forespørsel
+              Start på nytt
             </button>
           </div>
 
@@ -509,18 +483,179 @@
             aria-live="polite"
           ></p>
         </div>
-      </div>
+      </section>
     </section>
 
     <p class="privacy">
-      Dette er ikke et ekte bestillingssystem. Ingen opplysninger
-      lagres, og ingen e-post eller møteinvitasjon sendes automatisk.
+      Ingen opplysninger lagres. Ingen e-post eller møteinvitasjon
+      sendes automatisk.
     </p>
   </main>
 
   <script>
-    const form = document.getElementById("bookingForm");
-    const submitButton = document.getElementById("submitButton");
+    const form = document.getElementById("requestForm");
+    const generateButton = document.getElementById("generateButton");
 
     const progress = document.getElementById("progress");
-    const progressFill = document.getElementById("progressFill
+    const progressFill = document.getElementById("progressFill");
+    const statusText = document.getElementById("statusText");
+
+    const result = document.getElementById("result");
+    const emailEditor = document.getElementById("emailEditor");
+
+    const copyButton = document.getElementById("copyButton");
+    const resetButton = document.getElementById("resetButton");
+    const copyStatus = document.getElementById("copyStatus");
+
+    const wait = milliseconds =>
+      new Promise(resolve => setTimeout(resolve, milliseconds));
+
+    const steps = [
+      ["Kontrollerer fagområde …", 15],
+      ["Validerer ønsket oppgave …", 30],
+      ["Leser beskrivelsen …", 45],
+      ["Finner riktig rådgiver …", 60],
+      ["Søker etter fredag etter lunsj …", 75],
+      ["Skriver møteforespørsel …", 90],
+      ["Trykker nesten på Send …", 100]
+    ];
+
+    function getShortArea(area) {
+      if (area.startsWith("EBAS")) {
+        return "EBAS";
+      }
+
+      if (area.startsWith("NEBAS")) {
+        return "NEBAS";
+      }
+
+      if (area.startsWith("REBAS")) {
+        return "REBAS";
+      }
+
+      return "datasystemet";
+    }
+
+    function getGreeting(recipient) {
+      if (recipient === "Mathias og Erlend") {
+        return "Hei Mathias og Erlend,";
+      }
+
+      return `Hei ${recipient},`;
+    }
+
+    function createEmail({
+      name,
+      area,
+      task,
+      description,
+      recipient
+    }) {
+      const shortArea = getShortArea(area);
+      const greeting = getGreeting(recipient);
+
+      return `Emne: Forespørsel om hjelp med ${shortArea} i 2026
+
+${greeting}
+
+Jeg ønsker hjelp med ${task.toLowerCase()}.
+
+Dette gjelder:
+${area}
+
+Kort beskrivelse av det jeg ønsker å gjøre:
+${description}
+
+Har du anledning til å møtes for å se på dette sammen med meg?
+
+Fredag passer ofte godt, som regel etter lunsj. Hvis det ikke passer, finner vi selvfølgelig et annet tidspunkt.
+
+Vennlig hilsen
+${name}`;
+    }
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!form.reportValidity()) {
+        return;
+      }
+
+      const values = {
+        name: document.getElementById("name").value.trim(),
+        area: document.getElementById("area").value,
+        task: document.getElementById("task").value,
+        description:
+          document.getElementById("description").value.trim(),
+        recipient:
+          document.getElementById("recipient").value
+      };
+
+      generateButton.disabled = true;
+      progress.style.display = "block";
+      result.style.display = "none";
+      progressFill.style.width = "0%";
+      copyStatus.textContent = "";
+
+      for (const [text, percent] of steps) {
+        statusText.textContent = text;
+        progressFill.style.width = `${percent}%`;
+        await wait(550);
+      }
+
+      await wait(800);
+
+      emailEditor.value = createEmail(values);
+
+      form.style.display = "none";
+      progress.style.display = "none";
+      result.style.display = "block";
+
+      result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+      setTimeout(() => {
+        emailEditor.focus();
+      }, 500);
+    });
+
+    copyButton.addEventListener("click", async () => {
+      const text = emailEditor.value;
+
+      try {
+        await navigator.clipboard.writeText(text);
+
+        copyStatus.textContent =
+          "E-posten er kopiert. Lim den inn i din egen e-post og send den.";
+      } catch (error) {
+        emailEditor.focus();
+        emailEditor.select();
+
+        copyStatus.textContent =
+          "Teksten er markert. Trykk Ctrl+C eller Cmd+C for å kopiere.";
+      }
+    });
+
+    resetButton.addEventListener("click", () => {
+      form.reset();
+
+      emailEditor.value = "";
+      copyStatus.textContent = "";
+      progressFill.style.width = "0%";
+
+      result.style.display = "none";
+      progress.style.display = "none";
+      form.style.display = "block";
+
+      generateButton.disabled = false;
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  </script>
+</body>
+</html>
