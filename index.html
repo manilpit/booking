@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Timebestilling for datasystemet 2026</title>
+
+  <style>
+    :root {
+      --blue: #005a9c;
+      --blue-dark: #003f6f;
+      --blue-light: #eaf4fb;
+      --green: #177245;
+      --yellow: #fff4ce;
+      --red: #b42318;
+      --text: #17212b;
+      --muted: #5d6772;
+      --border: #d8dee4;
+      --background: #f4f7f9;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 32px 16px;
+      background:
+        radial-gradient(circle at top left, #dceef8, transparent 35%),
+        var(--background);
+      color: var(--text);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    .page {
+      width: min(760px, 100%);
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 20px;
+      padding: 28px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+      color: var(--white);
+      box-shadow: 0 16px 40px rgba(0, 63, 111, 0.18);
+    }
+
+    .header .label {
+      margin: 0 0 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.82;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 2.7rem);
+      line-height: 1.12;
+    }
+
+    .header p {
+      max-width: 620px;
+      margin: 14px 0 0;
+      line-height: 1.6;
+      opacity: 0.92;
+    }
+
+    .card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: 0 14px 35px rgba(31, 45, 61, 0.08);
+    }
+
+    .intro {
+      margin-top: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-top: 22px;
+    }
+
+    label,
+    legend {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #aeb8c2;
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--text);
+      font: inherit;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--blue);
+      outline: 3px solid rgba(0, 90, 156, 0.14);
+    }
+
+    .hint {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .time-notice {
+      margin-top: 24px;
+      padding: 15px 16px;
+      border-left: 5px solid #d6a500;
+      border-radius: 10px;
+      background: var(--yellow);
+      line-height: 1.55;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 26px;
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 11px;
+      background: var(--blue);
+      color: var(--white);
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      transition:
+        transform 120ms ease,
+        background 120ms ease;
+    }
+
+    button:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.68;
+      transform: none;
+    }
+
+    .progress {
+      display: none;
+      margin-top: 25px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .progress-bar {
+      height: 11px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8edf1;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), #39a0d8);
+      transition: width 500ms ease;
+    }
+
+    .status {
+      min-height: 26px;
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .result {
+      display: none;
+      margin-top: 25px;
+      padding: 22px;
+      border: 1px solid #edb7b2;
+      border-radius: 14px;
+      background: #fff5f4;
+      text-align: center;
+    }
+
+    .result .small {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .result h2 {
+      margin: 10px 0 6px;
+      color: var(--red);
+      font-size: clamp(2.2rem, 8vw, 4rem);
+    }
+
+    .result .message {
+      margin: 0;
+      font-size: clamp(1.2rem, 4vw, 1.65rem);
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .result .friday {
+      margin: 17px 0 0;
+      padding: 13px;
+      border-radius: 10px;
+      background: var(--white);
+      line-height: 1.5;
+    }
+
+    .details {
+      margin-top: 17px;
+      padding-top: 17px;
+      border-top: 1px solid #edcfcc;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.55;
+    }
+
+    .reset {
+      width: auto;
+      margin-top: 18px;
+      padding: 10px 18px;
+      background: #4d5965;
+    }
+
+    .privacy {
+      margin: 20px 4px 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    noscript {
+      display: block;
+      padding: 16px;
+      border-radius: 10px;
+      background: var(--yellow);
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 16px 10px;
+      }
+
+      .header,
+      .card {
+        padding: 21px;
+        border-radius: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="header">
+      <p class="label">NOKUTs datasystem</p>
+      <h1>Timebestilling 2026</h1>
+      <p>
+        Bestill hjelp til opplasting, import, validering,
+        datamodell, eksport eller tilgang.
+      </p>
+    </header>
+
+    <section class="card">
+      <noscript>
+        Denne løsningen krever JavaScript for å foreta den helt
+        automatiske og definitivt ekte bestillingen.
+      </noscript>
+
+      <form id="bookingForm">
+        <p class="intro">
+          Fyll ut skjemaet, så validerer systemet behovet ditt,
+          finner et passende tidspunkt og klargjør kontakten med
+          riktig rådgiver.
+        </p>
+
+        <div class="field">
+          <label for="navn">Hva heter du?</label>
+          <input
+            id="navn"
+            name="navn"
+            type="text"
+            autocomplete="name"
+            placeholder="Skriv navnet ditt"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="fagomrade">Hvilket fagområde gjelder det?</label>
+          <select id="fagomrade" name="fagomrade" required>
+            <option value="">Velg fagområde</option>
+            <option>EBAS – spørreundersøkelser og evalueringer</option>
+            <option>NEBAS – nasjonale eksamensdata</option>
+            <option>REBAS – regnskapsdata</option>
+            <option>Jeg vet ikke, og det er derfor jeg bestiller time</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="oppgave">Hva trenger du hjelp med?</label>
+          <select id="oppgave" name="oppgave" required>
+            <option value="">Velg oppgave</option>
+            <option>Laste opp eller importere data</option>
+            <option>Validere data</option>
+            <option>Eksportere data</option>
+            <option>Forstå datamodellen</option>
+            <option>Finne riktig tilgang eller rolle</option>
+            <option>Finne ut hvilket fagområde jeg egentlig trenger</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="radgiver">Hvem ønsker du hjelp fra?</label>
+          <select id="radgiver" name="radgiver" required>
+            <option value="">Velg rådgiver</option>
+            <option>Mathias</option>
+            <option>Erlend</option>
+            <option>Mathias og Erlend</option>
+            <option value="automatisk">Systemet får velge</option>
+          </select>
+        </div>
+
+        <div class="time-notice">
+          <strong>Anbefalt tidspunkt:</strong>
+          Fredag er ofte en god tid, som regel etter lunsj.
+        </div>
+
+        <button id="submitButton" type="submit">
+          Bestill time
+        </button>
+      </form>
+
+      <div
+        id="progress"
+        class="progress"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="progress-bar" aria-hidden="true">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+
+     
