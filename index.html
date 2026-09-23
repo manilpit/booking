@@ -12,6 +12,7 @@
       --blue-dark: #003f6f;
       --blue-light: #eaf4fb;
       --green: #177245;
+      --green-light: #edf8f2;
       --yellow: #fff4ce;
       --red: #b42318;
       --text: #17212b;
@@ -34,12 +35,12 @@
         var(--background);
       color: var(--text);
       font-family:
-        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+        Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     .page {
-      width: min(760px, 100%);
+      width: min(780px, 100%);
       margin: 0 auto;
     }
 
@@ -68,7 +69,7 @@
     }
 
     .header p {
-      max-width: 620px;
+      max-width: 640px;
       margin: 14px 0 0;
       line-height: 1.6;
       opacity: 0.92;
@@ -92,15 +93,15 @@
       margin-top: 22px;
     }
 
-    label,
-    legend {
+    label {
       display: block;
       margin-bottom: 8px;
       font-weight: 700;
     }
 
     input,
-    select {
+    select,
+    textarea {
       width: 100%;
       padding: 13px 14px;
       border: 1px solid #aeb8c2;
@@ -110,8 +111,15 @@
       font: inherit;
     }
 
+    textarea {
+      min-height: 105px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
     input:focus,
-    select:focus {
+    select:focus,
+    textarea:focus {
       border-color: var(--blue);
       outline: 3px solid rgba(0, 90, 156, 0.14);
     }
@@ -120,6 +128,7 @@
       margin: 7px 0 0;
       color: var(--muted);
       font-size: 0.9rem;
+      line-height: 1.45;
     }
 
     .time-notice {
@@ -190,6 +199,9 @@
     .result {
       display: none;
       margin-top: 25px;
+    }
+
+    .reveal {
       padding: 22px;
       border: 1px solid #edb7b2;
       border-radius: 14px;
@@ -197,7 +209,7 @@
       text-align: center;
     }
 
-    .result .small {
+    .reveal .small {
       margin: 0;
       color: var(--muted);
       font-size: 0.9rem;
@@ -206,41 +218,81 @@
       text-transform: uppercase;
     }
 
-    .result h2 {
+    .reveal h2 {
       margin: 10px 0 6px;
       color: var(--red);
       font-size: clamp(2.2rem, 8vw, 4rem);
     }
 
-    .result .message {
+    .reveal .message {
       margin: 0;
-      font-size: clamp(1.2rem, 4vw, 1.65rem);
+      font-size: clamp(1.15rem, 4vw, 1.55rem);
       font-weight: 800;
       line-height: 1.35;
     }
 
-    .result .friday {
-      margin: 17px 0 0;
-      padding: 13px;
-      border-radius: 10px;
-      background: var(--white);
-      line-height: 1.5;
+    .email-card {
+      margin-top: 20px;
+      padding: 22px;
+      border: 1px solid #b9dcc9;
+      border-radius: 14px;
+      background: var(--green-light);
     }
 
-    .details {
-      margin-top: 17px;
-      padding-top: 17px;
-      border-top: 1px solid #edcfcc;
-      color: var(--muted);
-      font-size: 0.94rem;
+    .email-card h3 {
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: 1.35rem;
+    }
+
+    .email-card > p {
+      margin: 0 0 18px;
       line-height: 1.55;
     }
 
-    .reset {
-      width: auto;
+    .email-field {
+      margin-top: 16px;
+    }
+
+    .email-output {
+      min-height: 275px;
+      background: var(--white);
+      line-height: 1.55;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       margin-top: 18px;
-      padding: 10px 18px;
+    }
+
+    .button-row button {
+      margin: 0;
+    }
+
+    .copy-button {
+      background: var(--green);
+    }
+
+    .copy-button:hover {
+      background: #105a36;
+    }
+
+    .reset-button {
       background: #4d5965;
+    }
+
+    .reset-button:hover {
+      background: #333d46;
+    }
+
+    .copy-status {
+      min-height: 24px;
+      margin: 12px 0 0;
+      color: var(--green);
+      font-weight: 700;
+      text-align: center;
     }
 
     .privacy {
@@ -268,6 +320,10 @@
         padding: 21px;
         border-radius: 15px;
       }
+
+      .button-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -278,8 +334,8 @@
       <p class="label">NOKUTs datasystem</p>
       <h1>Timebestilling 2026</h1>
       <p>
-        Bestill hjelp til opplasting, import, validering,
-        datamodell, eksport eller tilgang.
+        Beskriv hva du trenger hjelp med, så forbereder systemet
+        en nesten automatisk møteforespørsel.
       </p>
     </header>
 
@@ -291,9 +347,9 @@
 
       <form id="bookingForm">
         <p class="intro">
-          Fyll ut skjemaet, så validerer systemet behovet ditt,
-          finner et passende tidspunkt og klargjør kontakten med
-          riktig rådgiver.
+          Fyll ut skjemaet. Systemet validerer bestillingen og lager
+          en ferdig tekst som du kan lime inn i en e-post til Mathias
+          eller Erlend.
         </p>
 
         <div class="field">
@@ -315,7 +371,7 @@
             <option>EBAS – spørreundersøkelser og evalueringer</option>
             <option>NEBAS – nasjonale eksamensdata</option>
             <option>REBAS – regnskapsdata</option>
-            <option>Jeg vet ikke, og det er derfor jeg bestiller time</option>
+            <option>Jeg vet ikke hvilket fagområde det gjelder</option>
           </select>
         </div>
 
@@ -328,17 +384,38 @@
             <option>Eksportere data</option>
             <option>Forstå datamodellen</option>
             <option>Finne riktig tilgang eller rolle</option>
-            <option>Finne ut hvilket fagområde jeg egentlig trenger</option>
+            <option>Finne ut hvilket fagområde jeg trenger</option>
           </select>
         </div>
 
         <div class="field">
-          <label for="radgiver">Hvem ønsker du hjelp fra?</label>
+          <label for="beskrivelse">
+            Beskriv kort hva du ønsker å gjøre
+          </label>
+
+          <textarea
+            id="beskrivelse"
+            name="beskrivelse"
+            maxlength="600"
+            placeholder="For eksempel: Jeg skal laste opp data fra en spørreundersøkelse og ønsker hjelp med import og validering."
+            required
+          ></textarea>
+
+          <p class="hint">
+            Ikke skriv inn sensitive data eller personopplysninger.
+          </p>
+        </div>
+
+        <div class="field">
+          <label for="radgiver">
+            Hvem vil du sende forespørselen til?
+          </label>
+
           <select id="radgiver" name="radgiver" required>
-            <option value="">Velg rådgiver</option>
-            <option>Mathias</option>
-            <option>Erlend</option>
-            <option>Mathias og Erlend</option>
+            <option value="">Velg mottaker</option>
+            <option value="Mathias">Mathias</option>
+            <option value="Erlend">Erlend</option>
+            <option value="Mathias og Erlend">Mathias og Erlend</option>
             <option value="automatisk">Systemet får velge</option>
           </select>
         </div>
@@ -349,7 +426,7 @@
         </div>
 
         <button id="submitButton" type="submit">
-          Bestill time
+          Lag møteforespørsel
         </button>
       </form>
 
@@ -363,4 +440,87 @@
           <div id="progressFill" class="progress-fill"></div>
         </div>
 
-     
+        <p id="statusText" class="status">
+          Starter validering …
+        </p>
+      </div>
+
+      <div
+        id="result"
+        class="result"
+        aria-live="polite"
+      >
+        <div class="reveal">
+          <p class="small">Bestillingsstatus</p>
+          <h2>NEIDA!</h2>
+
+          <p class="message">
+            Du må spørre Mathias eller Erlend selv.
+          </p>
+        </div>
+
+        <div class="email-card">
+          <h3>E-posten er i det minste skrevet for deg</h3>
+
+          <p>
+            Kopier teksten nedenfor, lim den inn i en e-post,
+            kontroller innholdet og send den til valgt mottaker.
+          </p>
+
+          <div class="email-field">
+            <label for="emailSubject">Emne</label>
+            <input
+              id="emailSubject"
+              type="text"
+              readonly
+            >
+          </div>
+
+          <div class="email-field">
+            <label for="emailBody">E-posttekst</label>
+            <textarea
+              id="emailBody"
+              class="email-output"
+              readonly
+            ></textarea>
+          </div>
+
+          <div class="button-row">
+            <button
+              id="copyButton"
+              class="copy-button"
+              type="button"
+            >
+              Kopier emne og e-posttekst
+            </button>
+
+            <button
+              id="resetButton"
+              class="reset-button"
+              type="button"
+            >
+              Lag en ny forespørsel
+            </button>
+          </div>
+
+          <p
+            id="copyStatus"
+            class="copy-status"
+            aria-live="polite"
+          ></p>
+        </div>
+      </div>
+    </section>
+
+    <p class="privacy">
+      Dette er ikke et ekte bestillingssystem. Ingen opplysninger
+      lagres, og ingen e-post eller møteinvitasjon sendes automatisk.
+    </p>
+  </main>
+
+  <script>
+    const form = document.getElementById("bookingForm");
+    const submitButton = document.getElementById("submitButton");
+
+    const progress = document.getElementById("progress");
+    const progressFill = document.getElementById("progressFill
