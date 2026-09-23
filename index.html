@@ -163,8 +163,6 @@
     .progress {
       display: none;
       margin-top: 25px;
-      padding-top: 22px;
-      border-top: 1px solid var(--border);
     }
 
     .progress-bar {
@@ -243,7 +241,7 @@
     }
 
     .email-editor {
-      min-height: 420px;
+      min-height: 430px;
       background: var(--white);
       font-family:
         ui-monospace, SFMono-Regular, Menlo, Monaco,
@@ -315,21 +313,24 @@
 
 <body>
   <main class="page">
+
     <header class="header">
       <p class="label">NOKUTs datasystem</p>
       <h1>Møteforespørsel 2026</h1>
-
       <p>
-        Beskriv hva du trenger hjelp med, så finner systemet
-        den mest avanserte måten å be Mathias eller Erlend om hjelp på.
+        Fyll ut skjemaet, så hjelper systemet deg med å spørre
+        Mathias eller Erlend om hjelp.
       </p>
     </header>
 
     <section class="card">
+
+      <!-- DET ENESTE SKJEMAET -->
       <form id="requestForm">
+
         <p class="intro">
-          Fyll ut skjemaet. Etterpå lager systemet en møteforespørsel
-          basert på valgene dine.
+          Fortell hva du trenger hjelp med. Systemet lager deretter
+          en ferdig e-post basert på opplysningene dine.
         </p>
 
         <div class="field">
@@ -408,8 +409,10 @@
         <button id="generateButton" type="submit">
           Lag møteforespørsel
         </button>
+
       </form>
 
+      <!-- LASTEANIMASJON -->
       <div
         id="progress"
         class="progress"
@@ -425,13 +428,14 @@
         </p>
       </div>
 
+      <!-- RESULTAT, IKKE ET NYTT SKJEMA -->
       <section
         id="result"
         class="result"
         aria-live="polite"
       >
         <div class="reveal">
-          <p class="small">Resultat</p>
+          <p class="small">Bestillingsstatus</p>
 
           <h2>NEIDA!</h2>
 
@@ -441,16 +445,16 @@
         </div>
 
         <div class="editor-card">
-          <h2>Her er e-posten din</h2>
+          <h2>Ferdig møteforespørsel</h2>
 
           <p>
-            Systemet har laget en e-post basert på valgene dine.
-            Du kan redigere teksten direkte i feltet, kopiere den
-            og lime den inn i din egen e-post.
+            E-posten er generert fra opplysningene du allerede har
+            fylt ut. Du kan redigere teksten, kopiere den og lime
+            den inn i din egen e-post.
           </p>
 
           <label for="emailEditor">
-            Ferdig e-post
+            E-post som kan redigeres og kopieres
           </label>
 
           <textarea
@@ -484,16 +488,18 @@
           ></p>
         </div>
       </section>
+
     </section>
 
     <p class="privacy">
       Ingen opplysninger lagres. Ingen e-post eller møteinvitasjon
       sendes automatisk.
     </p>
+
   </main>
 
   <script>
-    const form = document.getElementById("requestForm");
+    const requestForm = document.getElementById("requestForm");
     const generateButton = document.getElementById("generateButton");
 
     const progress = document.getElementById("progress");
@@ -544,40 +550,37 @@
       return `Hei ${recipient},`;
     }
 
-    function createEmail({
-      name,
-      area,
-      task,
-      description,
-      recipient
-    }) {
-      const shortArea = getShortArea(area);
-      const greeting = getGreeting(recipient);
+    function createEmail(values) {
+      const shortArea = getShortArea(values.area);
+      const greeting = getGreeting(values.recipient);
 
       return `Emne: Forespørsel om hjelp med ${shortArea} i 2026
 
 ${greeting}
 
-Jeg ønsker hjelp med ${task.toLowerCase()}.
+Jeg ønsker hjelp med følgende:
 
-Dette gjelder:
-${area}
+Fagområde:
+${values.area}
 
-Kort beskrivelse av det jeg ønsker å gjøre:
-${description}
+Hva jeg trenger hjelp med:
+${values.task}
+
+Kort beskrivelse:
+${values.description}
 
 Har du anledning til å møtes for å se på dette sammen med meg?
 
 Fredag passer ofte godt, som regel etter lunsj. Hvis det ikke passer, finner vi selvfølgelig et annet tidspunkt.
 
 Vennlig hilsen
-${name}`;
+${values.name}`;
     }
 
-    form.addEventListener("submit", async event => {
+    requestForm.addEventListener("submit", async event => {
       event.preventDefault();
 
-      if (!form.reportValidity()) {
+      if (!requestForm.reportValidity()) {
         return;
       }
 
@@ -592,10 +595,12 @@ ${name}`;
       };
 
       generateButton.disabled = true;
-      progress.style.display = "block";
-      result.style.display = "none";
-      progressFill.style.width = "0%";
       copyStatus.textContent = "";
+      progressFill.style.width = "0%";
+
+      requestForm.style.display = "none";
+      result.style.display = "none";
+      progress.style.display = "block";
 
       for (const [text, percent] of steps) {
         statusText.textContent = text;
@@ -603,11 +608,10 @@ ${name}`;
         await wait(550);
       }
 
-      await wait(800);
+      await wait(750);
 
       emailEditor.value = createEmail(values);
 
-      form.style.display = "none";
       progress.style.display = "none";
       result.style.display = "block";
 
@@ -618,6 +622,7 @@ ${name}`;
 
       setTimeout(() => {
         emailEditor.focus();
+        emailEditor.setSelectionRange(0, 0);
       }, 500);
     });
 
@@ -628,7 +633,7 @@ ${name}`;
         await navigator.clipboard.writeText(text);
 
         copyStatus.textContent =
-          "E-posten er kopiert. Lim den inn i din egen e-post og send den.";
+          "Kopiert! Lim teksten inn i din egen e-post og send den.";
       } catch (error) {
         emailEditor.focus();
         emailEditor.select();
@@ -639,17 +644,16 @@ ${name}`;
     });
 
     resetButton.addEventListener("click", () => {
-      form.reset();
+      requestForm.reset();
 
       emailEditor.value = "";
       copyStatus.textContent = "";
       progressFill.style.width = "0%";
+      generateButton.disabled = false;
 
       result.style.display = "none";
       progress.style.display = "none";
-      form.style.display = "block";
-
-      generateButton.disabled = false;
+      requestForm.style.display = "block";
 
       window.scrollTo({
         top: 0,
